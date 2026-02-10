@@ -377,6 +377,259 @@ def search(query: str, version: Optional[str], top_k: int):
         sys.exit(1)
 
 
+@cli.command()
+@click.option(
+    "--data-dir",
+    type=click.Path(exists=True, path_type=Path),
+    default=Path("data_sources/strongs"),
+    help="Path to Strong's dictionary data directory",
+)
+@click.option(
+    "--batch-size",
+    type=int,
+    default=100,
+    help="Documents per API batch (max 100)",
+)
+@click.option(
+    "--no-embed",
+    is_flag=True,
+    help="Skip embedding generation (faster, but not searchable)",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Parse only, don't import to Prism",
+)
+def import_lexicon(
+    data_dir: Path,
+    batch_size: int,
+    no_embed: bool,
+    dry_run: bool,
+):
+    """Import Strong's Hebrew and Greek lexicon to Prism.
+
+    Downloads Strong's concordance from Open Scriptures (CC-BY-SA).
+    Creates ~14,000 searchable documents optimized for RAG workflows.
+
+    Example:
+        python cli.py import-lexicon --dry-run
+        python cli.py import-lexicon
+    """
+    from lexicon_importer import LexiconImporter
+
+    click.echo("📖 Strong's Lexicon Importer")
+    click.echo(f"   Data directory: {data_dir}")
+    click.echo(f"   Domain: lexicon/strongs")
+
+    # Initialize importer
+    try:
+        importer = LexiconImporter(data_dir=data_dir)
+    except Exception as e:
+        click.echo(f"❌ Error initializing importer: {e}", err=True)
+        sys.exit(1)
+
+    # Progress callback
+    def progress_callback(batch_num, total_batches, result):
+        if "error" in result:
+            click.echo(f"   ❌ Batch {batch_num}/{total_batches}: {result['error']}")
+        else:
+            imported = result.get("imported", 0)
+            failed = result.get("failed", 0)
+            click.echo(
+                f"   ✓ Batch {batch_num}/{total_batches}: "
+                f"{imported} imported, {failed} failed"
+            )
+
+    # Run import
+    try:
+        click.echo("\n🔍 Parsing lexicon data...")
+        results = importer.import_all(
+            batch_size=batch_size,
+            embed=not no_embed,
+            dry_run=dry_run,
+            progress_callback=progress_callback if not dry_run else None,
+        )
+
+        if dry_run:
+            click.echo(f"\n✅ Dry run complete!")
+            click.echo(f"   Total entries: {results['total_documents']:,}")
+            click.echo(f"   Hebrew: {results['hebrew_count']:,}")
+            click.echo(f"   Greek: {results['greek_count']:,}")
+            click.echo(f"\n📝 Sample entries:")
+            for i, doc in enumerate(results['sample_documents'], 1):
+                click.echo(f"\n   {i}. {doc['title']}")
+                click.echo(f"      Content: {doc['content'][:150]}...")
+                click.echo(f"      Metadata: {list(doc['metadata'].keys())}")
+        else:
+            click.echo(f"\n✅ Import complete!")
+            click.echo(f"   Total documents: {results['total_documents']:,}")
+            click.echo(f"   Hebrew entries: {results['hebrew_count']:,}")
+            click.echo(f"   Greek entries: {results['greek_count']:,}")
+            click.echo(f"   Successful: {results['success_count']:,}")
+            click.echo(f"   Errors: {results['error_count']:,}")
+
+            if results["errors"]:
+                click.echo(f"\n⚠️  Errors encountered:")
+                for error in results["errors"][:10]:
+                    if "batch" in error:
+                        click.echo(f"   - Batch {error['batch']}: {error['error']}")
+                    else:
+                        click.echo(f"   - {error.get('document', 'Unknown')}: {error['error']}")
+
+            if results["error_count"] > 0:
+                sys.exit(1)
+
+    except Exception as e:
+        click.echo(f"\n❌ Import failed: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--strong-ids",
+    help="Comma-separated Strong's IDs to verify (e.g., H1,G26)",
+)
+def verify_lexicon(strong_ids: Optional[str]):
+    """Verify lexicon entries were imported correctly.
+
+    Searches Prism for specific Strong's entries and displays results.
+
+    Example:
+        python cli.py verify-lexicon
+        python cli.py verify-lexicon --strong-ids H1,H157,G26,G2316
+    """
+    from lexicon_importer import verify_lexicon_import
+
+    click.echo("🔍 Verifying lexicon import...")
+
+    ids = None
+    if strong_ids:
+        ids = [s.strip() for s in strong_ids.split(",")]
+        click.echo(f"   Checking IDs: {', '.join(ids)}")
+
+    try:
+        results = asyncio.run(verify_lexicon_import(strong_ids=ids))
+
+        click.echo(f"\n📊 Prism Statistics:")
+        stats = results.get("prism_stats", {})
+        click.echo(f"   Total documents: {stats.get('total_documents', 0):,}")
+        click.echo(f"   Total chunks: {stats.get('total_chunks', 0):,}")
+        click.echo(f"   Embedded chunks: {stats.get('embedded_chunks', 0):,}")
+
+        lexicon_count = results.get("lexicon_document_count", 0)
+        click.echo(f"\n📖 Lexicon Documents: {lexicon_count:,}")
+
+        if lexicon_count == 0:
+            click.echo("\n❌ No lexicon documents found. Run 'import-lexicon' first.")
+            sys.exit(1)
+
+        click.echo(f"\n✅ Sample entries:")
+        for strong_id, search_results in results.get("entries", {}).items():
+            if search_results:
+                entry = search_results[0]
+                click.echo(f"\n   {strong_id}: {entry.get('document_title', 'Unknown')}")
+                click.echo(f"      Similarity: {entry.get('similarity', 0):.3f}")
+                content = entry.get('content', '')
+                preview = content[:200] + "..." if len(content) > 200 else content
+                click.echo(f"      {preview}")
+            else:
+                click.echo(f"\n   {strong_id}: ❌ Not found")
+
+    except Exception as e:
+        click.echo(f"❌ Error: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--batch-size",
+    type=int,
+    default=100,
+    help="Documents per API batch (max 100)",
+)
+@click.option(
+    "--no-embed",
+    is_flag=True,
+    help="Skip embedding generation (faster, but not searchable)",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Generate documents only, don't import to Prism",
+)
+def export_book_metadata(
+    batch_size: int,
+    no_embed: bool,
+    dry_run: bool,
+):
+    """Export book-level metadata to Prism as searchable documents.
+
+    Creates 66 documents (one per Bible book) with comprehensive metadata
+    including author, date, themes, genre, and historical context.
+
+    Example:
+        python cli.py export-book-metadata --dry-run
+        python cli.py export-book-metadata
+    """
+    from book_metadata_exporter import import_book_metadata
+
+    click.echo("📚 Book Metadata Exporter")
+    click.echo("   Domain: metadata/books")
+    click.echo("   Books: 66 (39 OT + 27 NT)")
+
+    # Progress callback
+    def progress_callback(batch_num, total_batches, result):
+        if "error" in result:
+            click.echo(f"   ❌ Batch {batch_num}/{total_batches}: {result['error']}")
+        else:
+            imported = result.get("imported", 0)
+            failed = result.get("failed", 0)
+            click.echo(
+                f"   ✓ Batch {batch_num}/{total_batches}: "
+                f"{imported} imported, {failed} failed"
+            )
+
+    try:
+        click.echo("\n🔍 Generating book metadata...")
+        results = asyncio.run(
+            import_book_metadata(
+                batch_size=batch_size,
+                embed=not no_embed,
+                dry_run=dry_run,
+                progress_callback=progress_callback if not dry_run else None,
+            )
+        )
+
+        if dry_run:
+            click.echo(f"\n✅ Dry run complete!")
+            click.echo(f"   Total books: {results['total_documents']}")
+            click.echo(f"\n📝 Sample documents:")
+            for i, doc in enumerate(results['sample_documents'], 1):
+                click.echo(f"\n   {i}. {doc['title']}")
+                click.echo(f"      {doc['content'][:150]}...")
+                click.echo(f"      Metadata keys: {list(doc['metadata'].keys())}")
+        else:
+            click.echo(f"\n✅ Import complete!")
+            click.echo(f"   Total documents: {results['total_documents']}")
+            click.echo(f"   Successful: {results['success_count']}")
+            click.echo(f"   Errors: {results['error_count']}")
+
+            if results["errors"]:
+                click.echo(f"\n⚠️  Errors encountered:")
+                for error in results["errors"][:10]:
+                    if "batch" in error:
+                        click.echo(f"   - Batch {error['batch']}: {error['error']}")
+                    else:
+                        click.echo(f"   - {error.get('document', 'Unknown')}: {error['error']}")
+
+            if results["error_count"] > 0:
+                sys.exit(1)
+
+    except Exception as e:
+        click.echo(f"\n❌ Export failed: {e}", err=True)
+        sys.exit(1)
+
+
 def _show_genre_distribution(documents: List[Dict]) -> None:
     """Display chunk distribution by genre."""
     from collections import defaultdict
