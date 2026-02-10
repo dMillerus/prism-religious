@@ -630,6 +630,335 @@ def export_book_metadata(
         sys.exit(1)
 
 
+@cli.command()
+@click.option(
+    "--data-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data_sources/geography"),
+    help="Path to geography data directory",
+)
+@click.option(
+    "--batch-size",
+    type=int,
+    default=100,
+    help="Documents per API batch (max 100)",
+)
+@click.option(
+    "--no-embed",
+    is_flag=True,
+    help="Skip embedding generation (faster, but not searchable)",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Parse only, don't import to Prism",
+)
+@click.option(
+    "--no-download",
+    is_flag=True,
+    help="Fail if data missing instead of auto-downloading",
+)
+def import_geography(
+    data_dir: Path,
+    batch_size: int,
+    no_embed: bool,
+    dry_run: bool,
+    no_download: bool,
+):
+    """Import biblical geography data to Prism.
+
+    Downloads place data from Open Bible Info (CC-BY-SA 4.0) with coordinates,
+    confidence scores, and verse references. Creates 300-700 searchable documents
+    for spatial RAG context.
+
+    Example:
+        python cli.py import-geography --dry-run
+        python cli.py import-geography
+        python cli.py import-geography --no-download
+    """
+    from geography_importer import GeographyImporter
+
+    click.echo("🗺️  Biblical Geography Importer")
+    click.echo(f"   Data directory: {data_dir}")
+    click.echo(f"   Domain: geography/biblical")
+    click.echo(f"   Download: {'disabled' if no_download else 'auto'}")
+
+    # Initialize importer
+    try:
+        importer = GeographyImporter(data_dir=data_dir)
+    except Exception as e:
+        click.echo(f"❌ Error initializing importer: {e}", err=True)
+        sys.exit(1)
+
+    # Progress callback
+    def progress_callback(batch_num, total_batches, result):
+        if "error" in result:
+            click.echo(f"   ❌ Batch {batch_num}/{total_batches}: {result['error']}")
+        else:
+            imported = result.get("imported", 0)
+            failed = result.get("failed", 0)
+            click.echo(
+                f"   ✓ Batch {batch_num}/{total_batches}: "
+                f"{imported} imported, {failed} failed"
+            )
+
+    # Run import
+    try:
+        if not dry_run:
+            click.echo("\n🔍 Parsing geography data...")
+        results = importer.import_all(
+            batch_size=batch_size,
+            embed=not no_embed,
+            dry_run=dry_run,
+            download=not no_download,
+            progress_callback=progress_callback if not dry_run else None,
+        )
+
+        if "error" in results:
+            click.echo(f"\n❌ {results['error']}", err=True)
+            sys.exit(1)
+
+        if dry_run:
+            click.echo(f"\n✅ Dry run complete!")
+            click.echo(f"   Total places: {results['total_documents']:,}")
+            click.echo(f"\n📊 Place types:")
+            for place_type, count in sorted(results['type_counts'].items()):
+                click.echo(f"      {place_type:12}: {count:3}")
+            click.echo(f"\n📝 Sample places:")
+            for i, doc in enumerate(results['sample_documents'], 1):
+                meta = doc['metadata']
+                coords = ""
+                if meta.get('latitude') and meta.get('longitude'):
+                    coords = f" ({meta['latitude']:.2f}°N, {meta['longitude']:.2f}°E)"
+                click.echo(f"\n   {i}. {doc['title']}{coords}")
+                click.echo(f"      Type: {meta.get('place_type', 'unknown')}")
+                click.echo(f"      Confidence: {meta.get('confidence_level', 'unknown')} (score: {meta.get('confidence_score', 0)})")
+                if meta.get('verse_references'):
+                    refs = meta['verse_references'][:3]
+                    click.echo(f"      Verses: {', '.join(refs)} ({len(meta.get('verse_references', []))} total)")
+        else:
+            click.echo(f"\n✅ Import complete!")
+            click.echo(f"   Total places: {results['total_documents']:,}")
+            click.echo(f"   Successful: {results['success_count']:,}")
+            click.echo(f"   Errors: {results['error_count']:,}")
+            click.echo(f"\n📊 Place types:")
+            for place_type, count in sorted(results['type_counts'].items()):
+                click.echo(f"      {place_type:12}: {count:3}")
+
+            if results["errors"]:
+                click.echo(f"\n⚠️  Errors encountered:")
+                for error in results["errors"][:10]:
+                    if "batch" in error:
+                        click.echo(f"   - Batch {error['batch']}: {error['error']}")
+                    else:
+                        click.echo(f"   - {error.get('document', 'Unknown')}: {error['error']}")
+
+            if results["error_count"] > 0:
+                sys.exit(1)
+
+    except Exception as e:
+        click.echo(f"\n❌ Import failed: {e}", err=True)
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--version",
+    "-v",
+    required=True,
+    help="Bible translation (e.g., kjv)",
+)
+@click.option(
+    "--modules-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data_sources/sword_modules"),
+    help="Path to SWORD modules directory",
+)
+@click.option(
+    "--sample-verses",
+    type=int,
+    default=5,
+    help="Number of sample verses to display",
+)
+def import_original(
+    version: str,
+    modules_dir: Path,
+    sample_verses: int,
+):
+    """Display original Hebrew/Greek text for sample verses (Phase 2: dry run only).
+
+    Shows interlinear display with original text and Strong's numbers.
+    Full reimport with metadata enhancement is deferred to Phase 3.
+
+    Example:
+        python cli.py import-original --version kjv
+        python cli.py import-original --version kjv --sample-verses 10
+    """
+    from sword_parser import SwordParser, verify_book_normalization
+
+    translation = version.upper()
+
+    click.echo(f"📖 Original Texts Display - {translation}")
+    click.echo(f"   Modules directory: {modules_dir}")
+    click.echo(f"   Mode: Dry run (Phase 2 - display only)")
+    click.echo(f"\n⚠️  Note: Full reimport with metadata enhancement is deferred to Phase 3")
+
+    # Initialize parser
+    try:
+        parser = SwordParser(modules_dir=modules_dir)
+        parser.initialize()
+    except Exception as e:
+        click.echo(f"\n❌ Error initializing SWORD parser: {e}", err=True)
+        sys.exit(1)
+
+    # Test verses (mix of OT and NT)
+    sample_references = [
+        ("Genesis", 1, 1),      # OT - Hebrew
+        ("Exodus", 3, 14),      # OT - Hebrew (I AM WHO I AM)
+        ("Psalm", 23, 1),       # OT - Hebrew (The LORD is my shepherd)
+        ("Isaiah", 53, 5),      # OT - Hebrew (prophecy)
+        ("John", 1, 1),         # NT - Greek (In the beginning was the Word)
+        ("John", 3, 16),        # NT - Greek (For God so loved the world)
+        ("Romans", 8, 28),      # NT - Greek (All things work together for good)
+        ("1 Corinthians", 13, 13),  # NT - Greek (faith, hope, love)
+    ]
+
+    # Limit to requested sample count
+    sample_references = sample_references[:sample_verses]
+
+    click.echo(f"\n📝 Sample Original Texts:\n")
+
+    for book, chapter, verse in sample_references:
+        try:
+            result = parser.get_verse_text(book, chapter, verse)
+
+            if result:
+                # Get English text for comparison (if available from Prism)
+                ref = f"{book} {chapter}:{verse}"
+
+                click.echo(f"{'=' * 70}")
+                click.echo(f"{ref}")
+                click.echo(f"{'=' * 70}")
+
+                # Original text
+                lang_display = "Hebrew" if result["language"] == "hebrew" else "Greek"
+                click.echo(f"{lang_display}: {result['original_text']}")
+
+                # Strong's numbers if present
+                if "strongs_numbers" in result and result["strongs_numbers"]:
+                    strongs_list = result["strongs_numbers"][:10]  # Show first 10
+                    strongs_str = ", ".join(strongs_list)
+                    if len(result["strongs_numbers"]) > 10:
+                        strongs_str += f", ... ({len(result['strongs_numbers'])} total)"
+                    click.echo(f"Strong's: {strongs_str}")
+
+                click.echo()
+            else:
+                click.echo(f"❌ {book} {chapter}:{verse}: Not found\n")
+
+        except Exception as e:
+            click.echo(f"❌ {book} {chapter}:{verse}: Error - {e}\n")
+
+    # Verify book normalization
+    click.echo(f"{'=' * 70}")
+    click.echo("📚 Book Name Normalization Verification")
+    click.echo(f"{'=' * 70}\n")
+
+    normalization = verify_book_normalization()
+
+    # Group by changes
+    no_change = []
+    with_change = []
+
+    for original, normalized in sorted(normalization.items()):
+        if original != normalized:
+            with_change.append((original, normalized))
+        else:
+            no_change.append(original)
+
+    if with_change:
+        click.echo("Books requiring normalization:")
+        for original, normalized in with_change:
+            click.echo(f"   {original:25} → {normalized}")
+
+    click.echo(f"\nTotal: {len(normalization)} books verified")
+    click.echo(f"   {len(no_change)} books unchanged")
+    click.echo(f"   {len(with_change)} books normalized")
+
+    click.echo(f"\n✅ Original texts accessible via SWORD modules")
+    click.echo(f"   Hebrew OT: {'✓' if parser.wlc else '✗'} WLC module")
+    click.echo(f"   Greek NT:  {'✓' if parser.sblgnt else '✗'} SBLGNT module")
+
+    click.echo(f"\n💡 Next Steps (Phase 3):")
+    click.echo(f"   1. Modify verse_chunker.py to accept original_texts parameter")
+    click.echo(f"   2. Add original text to verse metadata during chunking")
+    click.echo(f"   3. Implement full reimport command with --add-original-texts flag")
+    click.echo(f"   4. UI: Display Hebrew/Greek alongside English text")
+
+
+@cli.command()
+@click.option(
+    "--query",
+    help="Optional place name to search for (e.g., Jerusalem)",
+)
+def verify_geography(query: Optional[str]):
+    """Verify geography import was successful.
+
+    Searches Prism for biblical places and displays results.
+
+    Example:
+        python cli.py verify-geography
+        python cli.py verify-geography --query "Jerusalem"
+    """
+    from geography_importer import verify_geography_import
+
+    click.echo("🔍 Verifying geography import...")
+
+    sample_queries = None
+    if query:
+        sample_queries = [query]
+        click.echo(f"   Searching for: {query}")
+
+    try:
+        results = asyncio.run(verify_geography_import(sample_queries=sample_queries))
+
+        click.echo(f"\n📊 Prism Statistics:")
+        stats = results.get("prism_stats", {})
+        click.echo(f"   Total documents: {stats.get('total_documents', 0):,}")
+        click.echo(f"   Total chunks: {stats.get('total_chunks', 0):,}")
+
+        geography_count = results.get("geography_document_count", 0)
+        click.echo(f"\n🗺️  Geography Documents: {geography_count:,}")
+
+        if geography_count == 0:
+            click.echo("\n❌ No geography documents found. Run 'import-geography' first.")
+            sys.exit(1)
+
+        click.echo(f"\n✅ Sample places:")
+        for place_name, search_results in results.get("places", {}).items():
+            if search_results:
+                place = search_results[0]
+                meta = place.get('metadata', {})
+                click.echo(f"\n   {place_name}:")
+                click.echo(f"      Title: {place.get('document_title', 'Unknown')}")
+                click.echo(f"      Similarity: {place.get('similarity', 0):.3f}")
+                if meta.get('latitude') and meta.get('longitude'):
+                    click.echo(f"      Coordinates: {meta['latitude']:.4f}°N, {meta['longitude']:.4f}°E")
+                if meta.get('confidence_level'):
+                    click.echo(f"      Confidence: {meta['confidence_level']} (score: {meta.get('confidence_score', 0)})")
+                content = place.get('content', '')
+                preview = content[:200] + "..." if len(content) > 200 else content
+                click.echo(f"      {preview}")
+            else:
+                click.echo(f"\n   {place_name}: ❌ Not found")
+
+    except Exception as e:
+        click.echo(f"❌ Error: {e}", err=True)
+        sys.exit(1)
+
+
 def _show_genre_distribution(documents: List[Dict]) -> None:
     """Display chunk distribution by genre."""
     from collections import defaultdict
