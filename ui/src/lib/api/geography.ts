@@ -54,52 +54,74 @@ export async function fetchBiblicalPlaces(params: SearchPlacesParams = {}): Prom
 	}
 
 	try {
-		const filters: any = {
-			'metadata.domain': { $eq: 'geography/biblical' }
-		};
-
-		if (placeType) {
-			filters['metadata.place_type'] = { $eq: placeType };
-		}
-
-		if (confidenceLevel) {
-			filters['metadata.confidence_level'] = { $eq: confidenceLevel };
-		}
-
-		const response = await fetch(`${PRISM_API_URL}/api/v1/documents`, {
+		// Step 1: Get list of all geography document IDs
+		const listResponse = await fetch(`${PRISM_API_URL}/api/v1/documents?domain=geography/biblical&limit=2000`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
 
-		if (!response.ok) {
-			if (response.status === 404) {
-				throw new Error('Geography data not found. Please ensure biblical places have been imported into Prism.');
-			} else if (response.status === 503) {
-				throw new Error('Prism API is unavailable. Please check that the service is running.');
-			} else {
-				throw new Error(`Failed to load geography data (HTTP ${response.status}). Check API logs for details.`);
+		if (!listResponse.ok) {
+			throw new Error(`Failed to load geography data (HTTP ${listResponse.status})`);
+		}
+
+		const listData = await listResponse.json();
+		const documentIds = (listData.items || []).map((item: any) => item.id);
+
+		// Step 2: Fetch full details (with metadata) for all documents in batches
+		const batchSize = 50;
+		const allPlaces: BiblicalPlace[] = [];
+
+		for (let i = 0; i < documentIds.length; i += batchSize) {
+			const batch = documentIds.slice(i, i + batchSize);
+			const fetchPromises = batch.map(async (id: string) => {
+				try {
+					const response = await fetch(`${PRISM_API_URL}/api/v1/documents/${id}`);
+					if (response.ok) {
+						const doc = await response.json();
+						return doc;
+					}
+					return null;
+				} catch (e) {
+					console.error(`Failed to fetch document ${id}:`, e);
+					return null;
+				}
+			});
+
+			const batchResults = await Promise.all(fetchPromises);
+			const validDocs = batchResults.filter(doc => doc !== null);
+
+			for (const doc of validDocs) {
+				const place = transformDocumentToPlace(doc);
+				// Filter out invalid coordinates
+				if (place.latitude !== 0 && place.longitude !== 0) {
+					allPlaces.push(place);
+				}
 			}
 		}
 
-		const data = await response.json();
+		// Apply client-side filters if specified
+		let filteredPlaces = allPlaces;
 
-		// Transform Prism documents to BiblicalPlace format
-		const allPlaces: BiblicalPlace[] = data.documents
-			.filter((doc: any) => doc.metadata?.domain === 'geography/biblical')
-			.map((doc: any) => transformDocumentToPlace(doc));
+		if (placeType) {
+			filteredPlaces = filteredPlaces.filter(p => p.place_type === placeType);
+		}
+
+		if (confidenceLevel) {
+			filteredPlaces = filteredPlaces.filter(p => p.confidence_level === confidenceLevel);
+		}
 
 		// Cache all places if no filters
 		if (!placeType && !confidenceLevel) {
-			placesCache = { data: allPlaces, timestamp: Date.now() };
+			placesCache = { data: filteredPlaces, timestamp: Date.now() };
 		}
 
-		const places = allPlaces.slice(offset, offset + limit);
+		const places = filteredPlaces.slice(offset, offset + limit);
 
 		return {
 			places,
-			total: data.total || allPlaces.length
+			total: filteredPlaces.length
 		};
 	} catch (error) {
 		console.error('Error fetching biblical places:', error);
@@ -215,12 +237,12 @@ function transformDocumentToPlace(doc: any): BiblicalPlace {
 	return {
 		id: doc.id || doc.document_id,
 		document_id: doc.document_id || doc.id,
-		name: metadata.name || extractNameFromContent(doc.content),
+		name: metadata.place_name || metadata.name || extractNameFromContent(doc.content || ''),
 		latitude: parseFloat(metadata.latitude) || 0,
 		longitude: parseFloat(metadata.longitude) || 0,
 		place_type: metadata.place_type || 'unknown',
-		confidence_score: parseFloat(metadata.confidence) || 0,
-		confidence_level: getConfidenceLevel(parseFloat(metadata.confidence) || 0),
+		confidence_score: parseFloat(metadata.confidence_score) || parseFloat(metadata.confidence) || 0,
+		confidence_level: metadata.confidence_level || getConfidenceLevel(parseFloat(metadata.confidence_score) || parseFloat(metadata.confidence) || 0),
 		verse_references: Array.isArray(metadata.verse_references)
 			? metadata.verse_references
 			: (metadata.verse_references || '').split(',').filter(Boolean),
@@ -228,6 +250,29 @@ function transformDocumentToPlace(doc: any): BiblicalPlace {
 			? metadata.alternate_names
 			: (metadata.alternate_names || '').split(',').filter(Boolean),
 		content: doc.content || '',
+	};
+}
+
+function transformSearchResultToPlace(result: any): BiblicalPlace {
+	// Search results have format: { document_id, content, metadata, similarity }
+	const metadata = result.metadata || {};
+
+	return {
+		id: result.document_id,
+		document_id: result.document_id,
+		name: metadata.place_name || extractNameFromContent(result.content || ''),
+		latitude: parseFloat(metadata.latitude) || 0,
+		longitude: parseFloat(metadata.longitude) || 0,
+		place_type: metadata.place_type || 'unknown',
+		confidence_score: parseFloat(metadata.confidence_score) || 0,
+		confidence_level: metadata.confidence_level || getConfidenceLevel(parseFloat(metadata.confidence_score) || 0),
+		verse_references: Array.isArray(metadata.verse_references)
+			? metadata.verse_references
+			: [],
+		alternate_names: Array.isArray(metadata.alternate_names)
+			? metadata.alternate_names
+			: [],
+		content: result.content || '',
 	};
 }
 
