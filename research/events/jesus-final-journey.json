@@ -1,0 +1,169 @@
+{
+  "id": "jesus-final-journey",
+  "name": "Jesus' Final Journey to Jerusalem",
+  "category": "new_testament",
+  "subcategory": "jesus_ministry",
+  "biblical_references": [
+    "Luke 9:51-19:44",
+    "Matthew 19-20",
+    "Mark 10",
+    "John 11-12"
+  ],
+  "waypoints": [
+    {
+      "sequence": 1,
+      "name": "Capernaum",
+      "coordinates": [32.8814, 35.5733],
+      "event_description": "Jesus resolutely set out from His base in Galilee for Jerusalem, knowing what awaited Him. This marked the beginning of His final journey to the cross.",
+      "verse_references": ["Luke 9:51"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [32.8814, 35.5733],
+          [32.7, 35.6],
+          [32.6, 35.4],
+          [32.5, 35.3]
+        ],
+        "distance_km": 60,
+        "historical_route": "Ancient pilgrimage route",
+        "notes": "Main north-south road through Galilee toward Samaria. Standard route for pilgrims traveling from Galilee to Jerusalem.",
+        "research_source": "Galilean road system connecting Sea of Galilee to Samaria"
+      }
+    },
+    {
+      "sequence": 2,
+      "name": "Samaria Border",
+      "coordinates": [32.5, 35.3],
+      "event_description": "Jesus sent messengers ahead to a Samaritan village to prepare for His arrival, but the Samaritans refused to receive Him because He was heading to Jerusalem. This rejection led to a route change.",
+      "verse_references": ["Luke 9:52-56"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [32.5, 35.3],
+          [32.4, 35.4],
+          [32.3, 35.5]
+        ],
+        "distance_km": 40,
+        "historical_route": "Diversion route eastward",
+        "notes": "After Samaritan rejection, Jesus turned east toward the Jordan River to take the alternate Perea route, the standard path used by Jews avoiding Samaria.",
+        "research_source": "Jewish pilgrimage customs avoiding Samaritan territory"
+      }
+    },
+    {
+      "sequence": 3,
+      "name": "Jordan River Crossing",
+      "coordinates": [32.3, 35.5],
+      "event_description": "Jesus crossed the Jordan River into Perea (the region beyond the Jordan), following the traditional pilgrimage route used by Galilean Jews traveling to Jerusalem.",
+      "verse_references": ["Matthew 19:1", "Mark 10:1"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [32.3, 35.5],
+          [32.2, 35.5],
+          [32.05, 35.53],
+          [31.95, 35.55]
+        ],
+        "distance_km": 60,
+        "historical_route": "Jordan Valley road (Perea)",
+        "notes": "Traveled south through Perea along the eastern bank of the Jordan River. This was a well-established pilgrimage route with multiple Jewish settlements.",
+        "research_source": "Perea route as standard Jewish pilgrimage path"
+      }
+    },
+    {
+      "sequence": 4,
+      "name": "Perea",
+      "coordinates": [31.95, 35.55],
+      "event_description": "Jesus ministered throughout Perea, teaching about the kingdom of God. Here He healed ten lepers near the border of Samaria and Galilee and taught about the coming of the kingdom.",
+      "verse_references": ["Luke 17:11-19", "Luke 17:20-37"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [31.95, 35.55],
+          [31.92, 35.52],
+          [31.8667, 35.4500]
+        ],
+        "distance_km": 50,
+        "historical_route": "Jordan Valley road",
+        "notes": "Continued south through the Jordan Valley toward Jericho, following the natural corridor along the river.",
+        "research_source": "Jordan Valley pilgrimage corridor"
+      }
+    },
+    {
+      "sequence": 5,
+      "name": "Jericho",
+      "coordinates": [31.8667, 35.4500],
+      "event_description": "Entering Jericho, Jesus healed a blind beggar who cried out 'Jesus, Son of David, have mercy on me!' Inside the city, Jesus called Zacchaeus the tax collector down from a sycamore tree, bringing salvation to his house.",
+      "verse_references": ["Luke 18:35-43", "Luke 19:1-10"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [31.8667, 35.4500],
+          [31.84, 35.43],
+          [31.81, 35.38],
+          [31.78, 35.30],
+          [31.7687, 35.2586]
+        ],
+        "distance_km": 25,
+        "historical_route": "Jericho-Jerusalem road",
+        "notes": "Steep ascent of approximately 1,200 meters elevation gain from Jericho (lowest city on Earth) to Jerusalem. This is the same dangerous road featured in the parable of the Good Samaritan (Luke 10:30-37).",
+        "research_source": "Jericho-Jerusalem road, ancient pilgrimage route with steep ascent"
+      }
+    },
+    {
+      "sequence": 6,
+      "name": "Bethany",
+      "coordinates": [31.7687, 35.2586],
+      "event_description": "Jesus arrived in Bethany six days before Passover, staying at the home of Lazarus whom He had raised from the dead. Here Mary anointed Jesus' feet with expensive perfume, preparing Him for burial.",
+      "verse_references": ["John 12:1-8", "Matthew 26:6-13"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [31.7687, 35.2586],
+          [31.772, 35.254],
+          [31.7761, 35.2519]
+        ],
+        "distance_km": 1,
+        "historical_route": "Mount of Olives path",
+        "notes": "Short journey along the Mount of Olives from Bethany to Bethphage, less than 1 km. Both villages were on the eastern slope of the mount.",
+        "research_source": "Mount of Olives local paths connecting Bethany and Bethphage"
+      }
+    },
+    {
+      "sequence": 7,
+      "name": "Bethphage",
+      "coordinates": [31.7761, 35.2519],
+      "event_description": "Jesus sent two disciples ahead to find a colt that had never been ridden, saying 'The Lord needs it.' This prepared for His triumphal entry into Jerusalem, fulfilling Zechariah's prophecy.",
+      "verse_references": ["Luke 19:29-34", "Matthew 21:1-7"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [31.7761, 35.2519],
+          [31.776, 35.244],
+          [31.7767, 35.2345]
+        ],
+        "distance_km": 2,
+        "historical_route": "Mount of Olives descent",
+        "notes": "Descended the Mount of Olives toward Jerusalem's eastern gate. The crowds spread cloaks and palm branches on the road, shouting 'Hosanna! Blessed is He who comes in the name of the Lord!'",
+        "research_source": "Triumphal entry route from Mount of Olives to Jerusalem"
+      }
+    },
+    {
+      "sequence": 8,
+      "name": "Jerusalem",
+      "coordinates": [31.7767, 35.2345],
+      "event_description": "Jesus entered Jerusalem riding on a donkey as crowds shouted 'Hosanna to the Son of David!' He wept over the city, foreseeing its destruction, then entered the Temple and drove out the money changers. This began His final week before the crucifixion.",
+      "verse_references": ["Luke 19:35-46", "Matthew 21:8-17"]
+    }
+  ],
+  "path_type": "journey",
+  "metadata": {
+    "total_distance_km": 238,
+    "estimated_duration_days": 8,
+    "season": "spring",
+    "curated_by": "Claude Code (Sonnet 4.5)",
+    "curated_date": "2026-02-11",
+    "last_reviewed": "2026-02-11",
+    "confidence_level": "high",
+    "research_notes": "Well-documented historical route with all major locations archaeologically confirmed. Perea route reflects standard Jewish pilgrimage path avoiding Samaria. The final leg from Jericho to Jerusalem follows the steep road featured in the Good Samaritan parable. See research document for detailed sources and methodology."
+  }
+}
