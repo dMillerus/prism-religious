@@ -1,0 +1,216 @@
+{
+  "id": "exodus-journey",
+  "name": "The Exodus Journey",
+  "category": "old_testament",
+  "subcategory": "exodus",
+  "biblical_references": [
+    "Exodus 12:37-19:2",
+    "Numbers 33:1-15"
+  ],
+  "waypoints": [
+    {
+      "sequence": 1,
+      "name": "Rameses",
+      "coordinates": [30.7994, 31.8342],
+      "place_id": null,
+      "event_description": "The Israelites departed from Rameses in Egypt with Moses leading approximately 600,000 men plus women and children. This marked the beginning of the Exodus after the tenth plague.",
+      "verse_references": ["Exodus 12:37", "Numbers 33:3"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [30.7994, 31.8342],
+          [30.7, 31.9],
+          [30.6, 32.0]
+        ],
+        "distance_km": 50,
+        "historical_route": "Nile Delta road system",
+        "notes": "Ancient road system connecting settlements in the Nile Delta. Flat terrain with multiple channels and marshes.",
+        "research_source": "Delta road system connecting Pi-Ramesses (Tel el-Dab'a) to Succoth"
+      }
+    },
+    {
+      "sequence": 2,
+      "name": "Succoth",
+      "coordinates": [30.6, 32.0],
+      "place_id": null,
+      "event_description": "First encampment after leaving Egypt. The people gathered here before continuing eastward toward the wilderness.",
+      "verse_references": ["Exodus 12:37", "Numbers 33:5"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [30.6, 32.0],
+          [30.55, 32.1],
+          [30.5, 32.2]
+        ],
+        "distance_km": 40,
+        "historical_route": "Wadi Tumilat corridor",
+        "notes": "Natural east-west corridor through the delta region toward the edge of the wilderness.",
+        "research_source": "Wadi Tumilat as historical route eastward from delta"
+      }
+    },
+    {
+      "sequence": 3,
+      "name": "Etham",
+      "coordinates": [30.5, 32.2],
+      "place_id": null,
+      "event_description": "Encamped on the edge of the wilderness where the pillar of cloud by day and pillar of fire by night first appeared to guide them.",
+      "verse_references": ["Exodus 13:20-21", "Numbers 33:6"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [30.5, 32.2],
+          [30.3, 32.3],
+          [30.1, 32.4],
+          [29.9, 32.5]
+        ],
+        "distance_km": 80,
+        "historical_route": "custom",
+        "notes": "God commanded them to 'turn back' toward Pi Hahiroth (Exodus 14:2), creating a strategic position that would trap them against the Red Sea.",
+        "research_source": "Biblical text: 'turn back and encamp before Pi Hahiroth' (Ex 14:2)"
+      }
+    },
+    {
+      "sequence": 4,
+      "name": "Pi Hahiroth",
+      "coordinates": [29.9, 32.5],
+      "place_id": null,
+      "event_description": "Trapped between the Egyptian army and the Red Sea near Migdol and Baal Zephon. Pharaoh's pursuit catches up with them here.",
+      "verse_references": ["Exodus 14:2", "Exodus 14:9", "Numbers 33:7"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [29.9, 32.5],
+          [29.7, 32.6],
+          [29.5, 32.7]
+        ],
+        "distance_km": 50,
+        "historical_route": "custom",
+        "notes": "Path to the Red Sea crossing point in the Gulf of Suez. The Israelites were trapped with the sea before them and the Egyptian army behind them.",
+        "research_source": "Approach to Gulf of Suez crossing point (central Sinai route theory)"
+      }
+    },
+    {
+      "sequence": 5,
+      "name": "Red Sea Crossing",
+      "coordinates": [29.5, 32.7],
+      "place_id": null,
+      "event_description": "The LORD parted the Red Sea with a strong east wind, and the Israelites crossed on dry ground. The Egyptian army pursued but was drowned when the waters returned.",
+      "verse_references": ["Exodus 14:21-31", "Numbers 33:8"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [29.5, 32.7],
+          [29.4, 32.9],
+          [29.3, 33.1],
+          [29.1, 33.2]
+        ],
+        "distance_km": 120,
+        "historical_route": "custom",
+        "notes": "Three days journey through the wilderness with no water (Exodus 15:22). Desert terrain through wadis and dry wilderness.",
+        "research_source": "Biblical account: three days without water before reaching Marah"
+      }
+    },
+    {
+      "sequence": 6,
+      "name": "Marah",
+      "coordinates": [29.1, 33.2],
+      "place_id": null,
+      "event_description": "The people found bitter water and complained. Moses threw a tree into the water, and the LORD made it sweet for drinking.",
+      "verse_references": ["Exodus 15:23-25", "Numbers 33:8-9"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [29.1, 33.2],
+          [29.0, 33.15],
+          [28.8, 33.1]
+        ],
+        "distance_km": 30,
+        "historical_route": "custom",
+        "notes": "Wadi corridor leading to the oasis at Elim (likely Wadi Gharandel). Short journey to abundant water source.",
+        "research_source": "Wadi Gharandel as route from Marah to Elim"
+      }
+    },
+    {
+      "sequence": 7,
+      "name": "Elim",
+      "coordinates": [28.8, 33.1],
+      "place_id": null,
+      "event_description": "Oasis with twelve springs of water and seventy palm trees where the Israelites camped by the waters. A place of rest and refreshment.",
+      "verse_references": ["Exodus 15:27", "Numbers 33:9"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [28.8, 33.1],
+          [28.8, 33.2],
+          [28.75, 33.35],
+          [28.7, 33.5]
+        ],
+        "distance_km": 80,
+        "historical_route": "custom",
+        "notes": "Journey along the coast of the Red Sea then inland toward the Wilderness of Sin. Mixed coastal and inland terrain.",
+        "research_source": "Route following western Sinai coast then inland"
+      }
+    },
+    {
+      "sequence": 8,
+      "name": "Wilderness of Sin",
+      "coordinates": [28.7, 33.5],
+      "place_id": null,
+      "event_description": "The people complained about lack of food. God provided manna from heaven each morning and quail in the evening. The manna would continue for forty years.",
+      "verse_references": ["Exodus 16:1-36", "Numbers 33:11-12"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [28.7, 33.5],
+          [28.75, 33.55],
+          [28.8, 33.6]
+        ],
+        "distance_km": 50,
+        "historical_route": "custom",
+        "notes": "Wadi Feiran corridor approach. Natural pathway through mountainous terrain of southern Sinai.",
+        "research_source": "Wadi Feiran as route to Rephidim"
+      }
+    },
+    {
+      "sequence": 9,
+      "name": "Rephidim",
+      "coordinates": [28.8, 33.6],
+      "place_id": null,
+      "event_description": "No water was found and the people quarreled with Moses. God commanded Moses to strike the rock at Horeb, producing water. The Amalekites attacked but Joshua led Israel to victory while Moses held up his hands.",
+      "verse_references": ["Exodus 17:1-16", "Numbers 33:14"],
+      "route_to_next": {
+        "type": "wilderness",
+        "waypoints": [
+          [28.8, 33.6],
+          [28.7, 33.7],
+          [28.6, 33.85],
+          [28.5372, 33.9707]
+        ],
+        "distance_km": 40,
+        "historical_route": "custom",
+        "notes": "Mountain pass ascending through wadis toward Jebel Musa (Mount Sinai). Terrain transitions from wadi floor to mountain slopes.",
+        "research_source": "Wadi route from Wadi Feiran to Jebel Musa traditional site"
+      }
+    },
+    {
+      "sequence": 10,
+      "name": "Mount Sinai",
+      "coordinates": [28.5372, 33.9707],
+      "place_id": null,
+      "event_description": "The Israelites arrived at the mountain of God in the third month after leaving Egypt. Here Moses would receive the Ten Commandments and the Law. They would camp at the base of Mount Sinai for nearly a year.",
+      "verse_references": ["Exodus 19:1-2", "Numbers 33:15"],
+      "route_to_next": null
+    }
+  ],
+  "path_type": "journey",
+  "metadata": {
+    "total_distance_km": 540,
+    "estimated_duration_days": 50,
+    "season": "spring",
+    "curated_by": "Claude Code (Sonnet 4.5)",
+    "curated_date": "2026-02-10",
+    "last_reviewed": "2026-02-10",
+    "confidence_level": "medium",
+    "research_notes": "Central/Southern Sinai route to Jebel Musa (traditional Mount Sinai site). Major waypoints well-attested, wilderness route approximated based on terrain and water sources. Red Sea crossing location follows Gulf of Suez theory. See research document for detailed rationale and sources."
+  }
+}
