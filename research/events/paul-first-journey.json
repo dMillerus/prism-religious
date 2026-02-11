@@ -1,0 +1,321 @@
+{
+  "id": "paul-first-journey",
+  "name": "Paul's First Missionary Journey",
+  "category": "new_testament",
+  "subcategory": "paul_journeys",
+  "biblical_references": [
+    "Acts 13:1-14:28"
+  ],
+  "waypoints": [
+    {
+      "sequence": 1,
+      "name": "Antioch (Syria)",
+      "coordinates": [36.2000, 36.1500],
+      "event_description": "The Holy Spirit said, 'Set apart for me Barnabas and Saul for the work to which I have called them.' After fasting and prayer, the church in Antioch sent them off on their first missionary journey.",
+      "verse_references": ["Acts 13:1-3"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [36.2000, 36.1500],
+          [36.18, 36.10],
+          [36.15, 36.00],
+          [36.1210, 35.9290]
+        ],
+        "distance_km": 30,
+        "historical_route": "Roman road to port",
+        "notes": "Main road from Antioch to its port city Seleucia. Descended from inland city to Mediterranean coast.",
+        "research_source": "Roman road system from Antioch to Seleucia Pieria"
+      }
+    },
+    {
+      "sequence": 2,
+      "name": "Seleucia",
+      "coordinates": [36.1210, 35.9290],
+      "event_description": "From Antioch, Barnabas and Saul went down to Seleucia, the port city, and sailed from there to Cyprus to begin their missionary work among the Gentiles.",
+      "verse_references": ["Acts 13:4"],
+      "route_to_next": {
+        "type": "sea",
+        "waypoints": [
+          [36.1210, 35.9290],
+          [35.8, 35.5],
+          [35.5, 34.5],
+          [35.3, 34.0],
+          [35.1833, 33.9000]
+        ],
+        "distance_km": 160,
+        "historical_route": "Mediterranean shipping lane to Cyprus",
+        "notes": "Standard sea route from Syria to Cyprus. Sailing time of 1-2 days with favorable winds.",
+        "research_source": "Eastern Mediterranean sea routes, prevailing westerly winds in spring/summer"
+      }
+    },
+    {
+      "sequence": 3,
+      "name": "Salamis",
+      "coordinates": [35.1833, 33.9000],
+      "event_description": "Arrived at Salamis on the eastern coast of Cyprus and proclaimed the word of God in the Jewish synagogues. John Mark was with them as their helper.",
+      "verse_references": ["Acts 13:5"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [35.1833, 33.9000],
+          [35.0, 33.7],
+          [34.9, 33.3],
+          [34.85, 33.0],
+          [34.7768, 32.4245]
+        ],
+        "distance_km": 140,
+        "historical_route": "Cyprus east-west road",
+        "notes": "Traveled through the whole island from east to west, preaching in synagogues along the way. Ancient road system across Cyprus.",
+        "research_source": "Acts 13:6 'traveled through the whole island,' Cyprus road system"
+      }
+    },
+    {
+      "sequence": 4,
+      "name": "Paphos",
+      "coordinates": [34.7768, 32.4245],
+      "event_description": "Reached Paphos on the western coast. Confronted the sorcerer Elymas who opposed them. The proconsul Sergius Paulus, an intelligent man, sent for them and believed after witnessing Paul's miracle of blinding Elymas.",
+      "verse_references": ["Acts 13:6-12"],
+      "route_to_next": {
+        "type": "sea",
+        "waypoints": [
+          [34.7768, 32.4245],
+          [35.2, 32.0],
+          [35.8, 31.5],
+          [36.5, 31.0],
+          [36.9565, 30.8520]
+        ],
+        "distance_km": 290,
+        "historical_route": "Cyprus to Asia Minor sea route",
+        "notes": "Sailed northeast from Cyprus to the coast of Pamphylia in Asia Minor. Journey of 2-3 days across open Mediterranean waters.",
+        "research_source": "Mediterranean shipping lanes from Cyprus to southern Asia Minor coast"
+      }
+    },
+    {
+      "sequence": 5,
+      "name": "Perga",
+      "coordinates": [36.9565, 30.8520],
+      "event_description": "Paul and his companions sailed from Paphos and came to Perga in Pamphylia. Here John Mark left them and returned to Jerusalem, causing later conflict between Paul and Barnabas.",
+      "verse_references": ["Acts 13:13"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [36.9565, 30.8520],
+          [37.1, 31.0],
+          [37.4, 31.1],
+          [37.7, 31.15],
+          [38.0, 31.18],
+          [38.3052, 31.1885]
+        ],
+        "distance_km": 200,
+        "historical_route": "Roman road through Pisidia",
+        "notes": "Difficult journey ascending from coastal plain through Taurus Mountains to highland plateau. Elevation gain of approximately 1,000 meters. Known for bandits (referenced in Paul's letters).",
+        "research_source": "Roman road system from Pamphylia to Pisidia, terrain analysis"
+      }
+    },
+    {
+      "sequence": 6,
+      "name": "Pisidian Antioch",
+      "coordinates": [38.3052, 31.1885],
+      "event_description": "Traveled inland to Pisidian Antioch. Paul preached his first recorded sermon in the synagogue on the Sabbath, explaining how Jesus fulfilled Old Testament prophecies. Many Jews and God-fearing Gentiles believed, but Jewish leaders became jealous and stirred up persecution, forcing them to leave.",
+      "verse_references": ["Acts 13:14-52"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [38.3052, 31.1885],
+          [38.2, 31.4],
+          [38.05, 31.85],
+          [37.95, 32.2],
+          [37.8725, 32.4924]
+        ],
+        "distance_km": 130,
+        "historical_route": "Via Sebaste (Roman road)",
+        "notes": "Traveled southeast along the Via Sebaste, a major Roman road built by Augustus connecting cities of Galatia. Well-maintained imperial highway.",
+        "research_source": "Via Sebaste Roman road from Pisidian Antioch to Iconium, archaeological evidence"
+      }
+    },
+    {
+      "sequence": 7,
+      "name": "Iconium",
+      "coordinates": [37.8725, 32.4924],
+      "event_description": "Fled from Pisidian Antioch to Iconium. Paul and Barnabas spoke in the synagogue with such power that a great number of both Jews and Greeks believed. The city became divided, and when they learned of a plot to stone them, they fled to Lycaonia.",
+      "verse_references": ["Acts 14:1-7"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [37.8725, 32.4924],
+          [37.80, 32.45],
+          [37.70, 32.40],
+          [37.6017, 32.3384]
+        ],
+        "distance_km": 60,
+        "historical_route": "Via Sebaste (Roman road)",
+        "notes": "Continued south along the Via Sebaste toward the Lycaonian region. Relatively flat plateau terrain.",
+        "research_source": "Via Sebaste Roman road from Iconium to Lystra"
+      }
+    },
+    {
+      "sequence": 8,
+      "name": "Lystra",
+      "coordinates": [37.6017, 32.3384],
+      "event_description": "Paul healed a man who had been lame from birth. The crowds, speaking in Lycaonian, tried to worship Barnabas as Zeus and Paul as Hermes. Paul and Barnabas tore their clothes and rushed into the crowd to stop them. Jews from Antioch and Iconium came and won over the crowds, who stoned Paul and dragged him outside the city, leaving him for dead. But he got up and went back into the city.",
+      "verse_references": ["Acts 14:8-20"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [37.6017, 32.3384],
+          [37.55, 32.55],
+          [37.45, 32.90],
+          [37.40, 33.15],
+          [37.3490, 33.3618]
+        ],
+        "distance_km": 100,
+        "historical_route": "Via Sebaste extension",
+        "notes": "Continued southeast along the Via Sebaste toward the Cilician Gates. Derbe was on the frontier of Roman Galatia, beyond which lay the kingdom of Antiochus IV of Commagene.",
+        "research_source": "Via Sebaste extension from Lystra to Derbe, Roman frontier territory"
+      }
+    },
+    {
+      "sequence": 9,
+      "name": "Derbe",
+      "coordinates": [37.3490, 33.3618],
+      "event_description": "After being stoned at Lystra, Paul and Barnabas traveled to Derbe and preached the gospel there. They made many disciples. Derbe was the easternmost point of their journey before they turned back to strengthen the new churches.",
+      "verse_references": ["Acts 14:20-21"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [37.3490, 33.3618],
+          [37.40, 33.15],
+          [37.45, 32.90],
+          [37.55, 32.55],
+          [37.6017, 32.3384]
+        ],
+        "distance_km": 100,
+        "historical_route": "Via Sebaste (return route)",
+        "notes": "Retraced their steps westward along the Via Sebaste to strengthen the disciples in each city. Rather than taking a shorter route to Syrian Antioch via the Cilician Gates, they deliberately returned through the same cities where persecution had occurred.",
+        "research_source": "Acts 14:21-22, Via Sebaste return route"
+      }
+    },
+    {
+      "sequence": 10,
+      "name": "Lystra (Return)",
+      "coordinates": [37.6017, 32.3384],
+      "event_description": "Returned to Lystra to strengthen the disciples and encourage them to remain true to the faith, saying 'We must go through many hardships to enter the kingdom of God.' Despite having been stoned here, Paul courageously returned to build up the new believers.",
+      "verse_references": ["Acts 14:21-22"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [37.6017, 32.3384],
+          [37.70, 32.40],
+          [37.80, 32.45],
+          [37.8725, 32.4924]
+        ],
+        "distance_km": 60,
+        "historical_route": "Via Sebaste (return route)",
+        "notes": "Continued northwest along the Via Sebaste, retracing their outbound journey.",
+        "research_source": "Via Sebaste return route from Lystra to Iconium"
+      }
+    },
+    {
+      "sequence": 11,
+      "name": "Iconium (Return)",
+      "coordinates": [37.8725, 32.4924],
+      "event_description": "Returned to Iconium, strengthening the disciples. Appointed elders in the church with prayer and fasting, committing them to the Lord in whom they had put their trust.",
+      "verse_references": ["Acts 14:21-23"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [37.8725, 32.4924],
+          [37.95, 32.2],
+          [38.05, 31.85],
+          [38.2, 31.4],
+          [38.3052, 31.1885]
+        ],
+        "distance_km": 130,
+        "historical_route": "Via Sebaste (return route)",
+        "notes": "Continued northwest along the Via Sebaste toward Pisidian Antioch.",
+        "research_source": "Via Sebaste return route from Iconium to Pisidian Antioch"
+      }
+    },
+    {
+      "sequence": 12,
+      "name": "Pisidian Antioch (Return)",
+      "coordinates": [38.3052, 31.1885],
+      "event_description": "Returned to Pisidian Antioch to strengthen the disciples and appoint elders in the church. Despite the persecution that had driven them from this city, they courageously returned to establish leadership in the new congregation.",
+      "verse_references": ["Acts 14:21-23"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [38.3052, 31.1885],
+          [38.0, 31.18],
+          [37.7, 31.15],
+          [37.4, 31.1],
+          [37.1, 31.0],
+          [36.9565, 30.8520]
+        ],
+        "distance_km": 200,
+        "historical_route": "Roman road (return route)",
+        "notes": "Descended from the highland plateau through the Taurus Mountains back to the coastal plain. Retraced the difficult mountain route they had taken on the outbound journey.",
+        "research_source": "Roman road from Pisidia to Pamphylia, return route"
+      }
+    },
+    {
+      "sequence": 13,
+      "name": "Perga (Second Visit)",
+      "coordinates": [36.9565, 30.8520],
+      "event_description": "Returned to Perga and preached the word. On their first visit they had passed through without ministering, but now they took the opportunity to proclaim the gospel before leaving for the coast.",
+      "verse_references": ["Acts 14:25"],
+      "route_to_next": {
+        "type": "road",
+        "waypoints": [
+          [36.9565, 30.8520],
+          [36.95, 30.82],
+          [36.93, 30.75],
+          [36.9081, 30.6956]
+        ],
+        "distance_km": 20,
+        "historical_route": "Pamphylian coastal road",
+        "notes": "Short journey west along the coastal road from Perga to the port of Attalia. Flat terrain along the Mediterranean coast.",
+        "research_source": "Pamphylian coastal road system from Perga to Attalia"
+      }
+    },
+    {
+      "sequence": 14,
+      "name": "Attalia",
+      "coordinates": [36.9081, 30.6956],
+      "event_description": "From Perga, they went down to Attalia, a major port city on the coast. They sailed from here back to Syrian Antioch rather than retracing their land route through Cyprus.",
+      "verse_references": ["Acts 14:25-26"],
+      "route_to_next": {
+        "type": "sea",
+        "waypoints": [
+          [36.9081, 30.6956],
+          [36.5, 31.5],
+          [36.3, 33.0],
+          [36.2, 34.5],
+          [36.1210, 35.9290]
+        ],
+        "distance_km": 400,
+        "historical_route": "Mediterranean return route to Syria",
+        "notes": "Direct sea route from Attalia to Seleucia, bypassing Cyprus. Longer sea journey (3-4 days) but more direct than the outbound route. Prevailing summer winds favorable for this northeastern route.",
+        "research_source": "Mediterranean sea routes from southern Asia Minor to Syria, seasonal wind patterns"
+      }
+    },
+    {
+      "sequence": 15,
+      "name": "Antioch (Syria) - Journey Complete",
+      "coordinates": [36.2000, 36.1500],
+      "event_description": "Returned to Antioch, the church that had originally sent them out. They gathered the church together and reported all that God had done through them and how He had opened a door of faith to the Gentiles. They stayed there a long time with the disciples before the Jerusalem Council (Acts 15).",
+      "verse_references": ["Acts 14:26-28"]
+    }
+  ],
+  "path_type": "journey",
+  "metadata": {
+    "total_distance_km": 2020,
+    "estimated_duration_days": 730,
+    "season": "spring/summer",
+    "curated_by": "Claude Code (Sonnet 4.5)",
+    "curated_date": "2026-02-11",
+    "last_reviewed": "2026-02-11",
+    "confidence_level": "high",
+    "research_notes": "First major expansion of Christianity beyond Jewish communities. All cities archaeologically confirmed. Via Sebaste (Roman road) excavated and documented. Mediterranean sea routes well-established. Return journey explicitly stated in Acts 14:21-25. High confidence for all waypoints and route segments. See research document for detailed sources and methodology."
+  }
+}
