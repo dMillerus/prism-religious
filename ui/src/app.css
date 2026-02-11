@@ -68,7 +68,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .prose p {
-	@apply mb-3 leading-relaxed;
+	@apply mb-4 leading-relaxed text-base;
 }
 
 .prose p:last-child {
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .prose li {
-	@apply mb-1;
+	@apply mb-2 leading-relaxed text-base;
 }
 
 /* Animation utilities */
@@ -99,4 +99,90 @@ h1, h2, h3, h4, h5, h6 {
 
 .fade-in {
 	animation: fadeIn 0.2s ease-in;
+}
+
+/* Reading text utility */
+.text-reading {
+	font-size: 1.125rem; /* 18px */
+	line-height: 2;
+	color: theme('colors.gray.800');
+}
+
+/* Responsive scaling for reading text utility */
+@media (max-width: 640px) {
+	.text-reading { font-size: 0.9375rem; } /* 15px on mobile */
+}
+
+@media (min-width: 1536px) {
+	.text-reading { font-size: 1.25rem; } /* 20px on large displays */
+}
+
+/* Responsive typography scaling for Phase 1-2 improvements */
+/* Tablet (768px - 1279px): Moderate scaling */
+@media (min-width: 768px) and (max-width: 1279px) {
+	.text-lg { font-size: 1.0625rem !important; } /* 17px on tablet (was 18px) */
+	.text-base { font-size: 0.9375rem !important; } /* 15px on tablet (was 16px) */
+	.leading-loose { line-height: 1.75 !important; } /* Tighter line-height for tablets */
+	.px-5 { padding-left: 1rem !important; padding-right: 1rem !important; } /* 16px padding */
+	.py-4 { padding-top: 0.875rem !important; padding-bottom: 0.875rem !important; } /* 14px vertical padding */
+	.gap-8 { gap: 1.5rem !important; } /* 24px gaps (was 32px) */
+}
+
+/* Mobile (up to 767px): Compact scaling */
+@media (max-width: 767px) {
+	.text-xl { font-size: 1.0625rem !important; } /* 17px on mobile (was 20px) */
+	.text-lg { font-size: 1rem !important; } /* 16px on mobile (was 18px) */
+	.text-base { font-size: 0.875rem !important; } /* 14px on mobile (was 16px) */
+	.text-sm { font-size: 0.8125rem !important; } /* 13px on mobile (was 14px) */
+	.leading-loose { line-height: 1.625 !important; } /* Comfortable line-height for mobile */
+	.px-5 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; } /* 12px padding */
+	.px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; } /* 12px padding */
+	.py-4 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; } /* 12px vertical padding */
+	.py-3 { padding-top: 0.625rem !important; padding-bottom: 0.625rem !important; } /* 10px vertical padding */
+	.gap-8 { gap: 1rem !important; } /* 16px gaps (was 32px) */
+	.gap-6 { gap: 1rem !important; } /* 16px gaps (was 24px) */
+	.gap-4 { gap: 0.75rem !important; } /* 12px gaps (was 16px) */
+	.mb-4 { margin-bottom: 0.75rem !important; } /* 12px bottom margin */
+	.mb-3 { margin-bottom: 0.625rem !important; } /* 10px bottom margin */
+}
+
+/* Biblical Events - Geography Map Styling */
+.event-waypoint-marker {
+	background: none !important;
+	border: none !important;
+}
+
+.event-waypoint-marker .waypoint-number {
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-waypoint-marker:hover .waypoint-number {
+	transform: scale(1.1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Terracotta color (event theme) */
+.bg-terracotta-600 {
+	background-color: #E2725B;
+}
+
+.bg-terracotta-100 {
+	background-color: #FEF3F2;
+}
+
+.border-terracotta-600 {
+	border-color: #E2725B;
+}
+
+.text-terracotta-600 {
+	color: #E2725B;
+}
+
+.hover\:bg-terracotta-700:hover {
+	background-color: #D1614A;
+}
+
+/* Event sidebar transitions */
+.event-sidebar-container {
+	transition: width 0.3s ease;
 }

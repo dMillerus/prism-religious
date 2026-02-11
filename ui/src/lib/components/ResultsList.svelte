@@ -6,6 +6,8 @@
 	import { getTestament, OT_BOOKS, NT_BOOKS } from '$lib/api/sword';
 	import { goto } from '$app/navigation';
 
+	let showScores = false;
+
 	function handleSelect(result: BibleSearchResult) {
 		selectVerse(result);
 	}
@@ -21,9 +23,24 @@
 		return 'text-gray-600';
 	}
 
-	function truncateText(text: string, maxLength: number = 80): string {
+	function truncateText(text: string, maxLength: number = 120): string {
 		if (text.length <= maxLength) return text;
-		return text.slice(0, maxLength) + '...';
+
+		// Try sentence boundary first (. ! ?)
+		const sentenceEnd = text.slice(0, maxLength).lastIndexOf('.');
+		if (sentenceEnd > maxLength * 0.6) {
+			return text.slice(0, sentenceEnd + 1);
+		}
+
+		// Try phrase boundary (, ; :)
+		const lastComma = text.slice(0, maxLength).lastIndexOf(',');
+		if (lastComma > maxLength * 0.6) {
+			return text.slice(0, lastComma + 1) + '...';
+		}
+
+		// Fall back to word boundary
+		const lastSpace = text.lastIndexOf(' ', maxLength);
+		return text.slice(0, lastSpace > 0 ? lastSpace : maxLength) + '...';
 	}
 
 	// Check if verse has geography data (places mentioned)
@@ -72,20 +89,33 @@
 <div class="results-list h-full flex flex-col bg-gray-50 border-r border-gray-200">
 	<!-- Header -->
 	<div class="px-4 py-3 bg-white border-b border-gray-200">
-		<h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-			<BookOpen class="h-4 w-4" />
-			Results
+		<div class="flex items-start justify-between">
+			<div>
+				<h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+					<BookOpen class="h-4 w-4" />
+					Results
+					{#if $searchResults.length > 0}
+						<span class="text-xs font-normal text-gray-500">
+							({$searchResults.length})
+						</span>
+					{/if}
+				</h2>
+				{#if $searchQuery}
+					<p class="text-xs text-gray-500 mt-1 truncate">
+						Search: "{$searchQuery}"
+					</p>
+				{/if}
+			</div>
 			{#if $searchResults.length > 0}
-				<span class="text-xs font-normal text-gray-500">
-					({$searchResults.length})
-				</span>
+				<button
+					on:click={() => showScores = !showScores}
+					class="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
+					title="Toggle similarity scores">
+					<Star class="h-3 w-3" />
+					{showScores ? 'Hide' : 'Show'}
+				</button>
 			{/if}
-		</h2>
-		{#if $searchQuery}
-			<p class="text-xs text-gray-500 mt-1 truncate">
-				Search: "{$searchQuery}"
-			</p>
-		{/if}
+		</div>
 	</div>
 
 	<!-- Results list -->
@@ -107,15 +137,15 @@
 				{#each $searchResults as result}
 					<button
 						on:click={() => handleSelect(result)}
-						class="w-full text-left px-4 py-3 hover:bg-white transition-colors
+						class="w-full text-left px-5 py-4 hover:bg-white transition-all duration-150
 							   {$selectedVerse?.chunk_id === result.chunk_id
-								? 'bg-primary-50 border-l-4 border-primary-500'
+								? 'bg-white border-l-4 border-primary-500 shadow-md ring-1 ring-primary-200'
 								: 'bg-gray-50'}"
 					>
 						<!-- Reference and score -->
-						<div class="flex items-start justify-between gap-2 mb-1">
+						<div class="flex items-start justify-between gap-2 mb-2">
 							<div class="flex items-center gap-2">
-								<span class="text-sm font-semibold text-gray-900">
+								<span class="text-lg font-bold text-gray-900">
 									{result.verse_ref}
 								</span>
 								<!-- Feature indicators -->
@@ -138,19 +168,27 @@
 									{/if}
 								</div>
 							</div>
-							<span class="flex items-center gap-1 text-xs {getScoreColor(result.similarity)}">
-								<Star class="h-3 w-3 fill-current" />
-								{formatScore(result.similarity)}
-							</span>
+							{#if showScores}
+								<span class="flex items-center gap-1 text-xs {getScoreColor(result.similarity)}">
+									<Star class="h-3 w-3 fill-current" />
+									{formatScore(result.similarity)}
+								</span>
+							{/if}
 						</div>
 
 						<!-- Translation -->
-						<div class="text-xs text-gray-500 uppercase mb-2">
-							{result.translation}
+						<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium mb-3
+							{result.translation === 'kjv' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' :
+							 result.translation === 'asv' ? 'bg-olive-100 text-olive-800 border border-olive-200' :
+							 result.translation === 'bbe' ? 'bg-primary-100 text-primary-800 border border-primary-200' :
+							 result.translation === 'ylt' ? 'bg-sand-200 text-sand-900 border border-sand-300' :
+							 'bg-gray-100 text-gray-800 border border-gray-200'}">
+							<BookOpen class="h-3.5 w-3.5" />
+							{result.translation.toUpperCase()}
 						</div>
 
 						<!-- Preview text -->
-						<p class="text-sm text-gray-700 leading-relaxed mb-2">
+						<p class="text-base text-gray-700 leading-loose mb-2">
 							{truncateText(result.text)}
 						</p>
 
@@ -209,5 +247,21 @@
 	.results-list {
 		min-width: 280px;
 		max-width: 320px;
+	}
+
+	/* Mobile responsive adjustments */
+	@media (max-width: 767px) {
+		.results-list {
+			min-width: 100%;
+			max-width: 100%;
+		}
+	}
+
+	/* Tablet responsive adjustments */
+	@media (min-width: 768px) and (max-width: 1023px) {
+		.results-list {
+			min-width: 260px;
+			max-width: 280px;
+		}
 	}
 </style>

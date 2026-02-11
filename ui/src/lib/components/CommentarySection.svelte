@@ -65,7 +65,7 @@
 	>
 		<div class="flex items-center gap-2">
 			<MessageSquare class="h-4 w-4 text-primary-600" />
-			<h3 class="text-sm font-semibold text-gray-800">Commentary</h3>
+			<h3 class="text-base font-bold text-gray-800">Commentary</h3>
 		</div>
 		{#if expanded}
 			<ChevronDown class="h-4 w-4 text-gray-400" />
@@ -93,7 +93,7 @@
 					</button>
 				</div>
 			{:else if commentary}
-				<div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+				<div class="prose prose-base max-w-none text-gray-700 leading-relaxed">
 					{@html commentary.replace(/\n\n/g, '</p><p class="mt-3">')}
 				</div>
 			{:else}

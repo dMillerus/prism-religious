@@ -88,7 +88,7 @@
 	>
 		<div class="flex items-center gap-2">
 			<Link2 class="h-4 w-4 text-primary-600" />
-			<h3 class="text-sm font-semibold text-gray-800">Cross-References</h3>
+			<h3 class="text-base font-bold text-gray-800">Cross-References</h3>
 		</div>
 		{#if expanded}
 			<ChevronDown class="h-4 w-4 text-gray-400" />
@@ -125,12 +125,12 @@
 							class="w-full px-4 py-3 text-left hover:bg-gray-100 transition-colors"
 						>
 							<div class="flex items-start gap-2">
-								<span class="text-base mt-0.5">{getRelationIcon(ref.relation_type)}</span>
+								<span class="text-lg mt-0.5">{getRelationIcon(ref.relation_type)}</span>
 								<div class="flex-1 min-w-0">
-									<div class="text-sm font-semibold text-primary-700 hover:text-primary-800">
+									<div class="text-base font-semibold text-primary-700 hover:text-primary-800">
 										{ref.verse_ref}
 									</div>
-									<p class="text-xs text-gray-600 mt-1">
+									<p class="text-sm text-gray-600 mt-1">
 										{ref.explanation}
 									</p>
 									<span class="text-xs text-gray-400 capitalize mt-1 inline-block">

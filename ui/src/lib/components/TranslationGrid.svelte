@@ -107,14 +107,14 @@
 		</div>
 	{:else}
 		<!-- Header -->
-		<div class="px-6 py-4 border-b border-gray-200">
+		<div class="px-8 py-5 border-b border-gray-200 bg-gradient-to-r from-white to-sand-50">
 			<div class="flex items-start justify-between">
 				<div>
-					<h2 class="text-lg font-semibold text-gray-900">
+					<h2 class="text-xl font-bold text-gray-900 font-heading mb-1">
 						{$selectedVerse.verse_ref}
 					</h2>
-					<p class="text-sm text-gray-600 mt-1">
-						Translation Comparison
+					<p class="text-base text-gray-600">
+						Translation Comparison ({$compareTranslations.length} versions)
 					</p>
 				</div>
 				<!-- Citation and Export buttons -->
@@ -145,7 +145,7 @@
 		</div>
 
 		<!-- Grid content -->
-		<div class="flex-1 overflow-y-auto p-6">
+		<div class="flex-1 overflow-y-auto p-8">
 			{#if loading}
 				<div class="flex items-center justify-center h-full">
 					<div class="text-center">
@@ -165,15 +165,15 @@
 				</div>
 			{:else if Object.keys($comparisonData).length > 0}
 				<!-- Grid layout -->
-				<div class="grid grid-cols-{$compareTranslations.length} gap-6">
+				<div class="grid grid-cols-{$compareTranslations.length} gap-8">
 					{#each $compareTranslations as translation}
 						<div class="flex flex-col">
 							<!-- Translation header -->
-							<div class="mb-3 pb-2 border-b border-gray-200">
-								<h3 class="text-xs font-semibold text-gray-900 uppercase tracking-wide">
+							<div class="mb-4 pb-3 border-b-2 border-gray-300">
+								<h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-1">
 									{translation}
 								</h3>
-								<p class="text-xs text-gray-500 mt-0.5">
+								<p class="text-sm text-gray-600">
 									{getTranslationLabel(translation).split('(')[1]?.replace(')', '')}
 								</p>
 							</div>
@@ -181,7 +181,7 @@
 							<!-- Translation text -->
 							<div class="flex-1">
 								{#if $comparisonData[translation]}
-									<p class="text-base leading-relaxed text-gray-800">
+									<p class="text-lg leading-loose text-gray-800 text-justify">
 										{$comparisonData[translation]}
 									</p>
 								{:else}
@@ -241,5 +241,29 @@
 	}
 	.grid-cols-4 {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	/* Mobile responsive: Force single column */
+	@media (max-width: 767px) {
+		.grid-cols-2,
+		.grid-cols-3,
+		.grid-cols-4 {
+			grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+		}
+	}
+
+	/* Tablet responsive: Max 2 columns */
+	@media (min-width: 768px) and (max-width: 1023px) {
+		.grid-cols-3,
+		.grid-cols-4 {
+			grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		}
+	}
+
+	/* Small desktop: Max 3 columns */
+	@media (min-width: 1024px) and (max-width: 1279px) {
+		.grid-cols-4 {
+			grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+		}
 	}
 </style>
