@@ -1,12 +1,15 @@
+# Prism Religious Studies (PRS) Services
+# Usage: docker compose -f compose.yaml -f prism-religious/config/docker-compose.prs.yaml up -d
+
 services:
-  prism-rs:
+  prism-religious-ui:
     build:
-      context: ./bible-study/ui
+      context: ./prism-religious/ui
       dockerfile: docker/Dockerfile
       args:
         - VITE_PRISM_API_URL=http://localhost:8100
         - VITE_OLLAMA_API_URL=http://localhost:11434
-    container_name: prism-rs
+    container_name: prism-religious-ui
     restart: unless-stopped
     ports:
       - "127.0.0.1:3003:3000"
