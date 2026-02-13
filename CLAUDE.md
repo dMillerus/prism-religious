@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with the Prism Religious Studies (bible-study) submodule.
+This file provides guidance to Claude Code when working with the Prism Religious Studies submodule.
 
 ## Project Overview
 
@@ -76,16 +76,16 @@ This file provides guidance to Claude Code when working with the Prism Religious
 From main `aiml-stack` repository:
 ```bash
 # Start service (overlay compose pattern)
-make prism-rs-start          # or legacy: make bible-study-start
+make prs-start
 
 # Check health
-make prism-rs-status         # or legacy: make bible-study-status
+make prs-status
 
 # View logs
-make prism-rs-logs           # or legacy: make bible-study-logs
+make prs-logs
 
 # Stop service
-make prism-rs-stop           # or legacy: make bible-study-stop
+make prs-stop
 
 # Access UI
 open http://localhost:3003
@@ -127,7 +127,7 @@ make bible-import-all
 make bible-clean-import VERSION=kjv
 
 # Development
-cd bible-study/importer
+cd prism-religious/importer
 python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
@@ -298,9 +298,9 @@ book,chapter,verse,text
 ## Critical Rules
 
 ### CSV Path Resolution
-Importer expects CSV files at `../../data/bible/{version}/` relative to `bible-study/importer/`:
+Importer expects CSV files at `../../data/bible/{version}/` relative to `prism-religious/importer/`:
 ```
-bible-study/importer/ → bible-study/ → aiml-stack/ → data/bible/
+prism-religious/importer/ → prism-religious/ → aiml-stack/ → data/bible/
 ```
 This structure is maintained by the overlay compose pattern.
 
@@ -341,7 +341,7 @@ const metadata = {
 
 2. **Import to Prism**:
    ```bash
-   cd bible-study/importer
+   cd prism-religious/importer
    python cli.py import ../../data/bible/{version}
    ```
 
@@ -368,7 +368,7 @@ curl -X POST http://localhost:8100/api/v1/documents/search \
   -d '{"query": "shepherd", "top_k": 5, "filters": {"metadata.bible_version": {"$eq": "kjv"}}}'
 
 # Check importer logs
-cd bible-study/importer
+cd prism-religious/importer
 python cli.py status
 ```
 
@@ -421,9 +421,9 @@ pytest --cov=. tests/                    # With coverage
 
 ## Deployment Notes
 
-- Service uses overlay compose pattern (like govarch)
-- Build context is `bible-study/ui/` from main repo root
-- Container name `bible-study` matches homepage dashboard config
+- Service uses overlay compose pattern (like prism-legislative)
+- Build context is `prism-religious/ui/` from main repo root
+- Container name `prism-religious-ui` matches homepage dashboard config
 - Memory limit: 512MB (sufficient for SvelteKit SSR)
 - Health check polls internal port 3000 (mapped to 3003)
 - Requires `aiml-net` network from main stack
@@ -433,7 +433,7 @@ pytest --cov=. tests/                    # With coverage
 | Path | Purpose |
 |------|---------|
 | **Configuration** ||
-| `config/docker-compose.bible.yaml` | Overlay compose file (container: prism-rs) |
+| `config/docker-compose.bible.yaml` | Overlay compose file (container: prism-religious-ui) |
 | `ui/package.json` | Dependencies (Leaflet 1.9.4, SvelteKit 2.5) |
 | `ui/tailwind.config.js` | Mediterranean color palette + custom fonts |
 | `ui/src/app.css` | Global styles + Hebrew/Greek CSS |
@@ -475,7 +475,7 @@ pytest --cov=. tests/                    # With coverage
 **Service won't start:**
 - Check Prism is running: `docker compose ps prism`
 - Check network exists: `docker network ls | grep aiml-net`
-- View build logs: `make bible-study-logs`
+- View build logs: `make prs-logs`
 
 **Search returns no results:**
 - Verify data imported: `make bible-status`
