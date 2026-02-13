@@ -19,9 +19,8 @@ All 25 tasks across 6 implementation phases have been completed successfully. Co
 **Application Name**:
 - ✅ "Prism Religious Studies" appears in 8+ files across UI
 - ✅ Package.json updated to `prism-religious-studies-ui`
-- ✅ Docker container renamed to `prism-rs`
-- ✅ Makefile commands: `prism-rs-start`, `prism-rs-status`, `prism-rs-logs`, `prism-rs-stop`
-- ✅ Legacy `bible-study-*` commands aliased for backward compatibility
+- ✅ Docker container renamed to `prism-religious-ui`
+- ✅ Makefile commands: `prs-start`, `prs-status`, `prs-logs`, `prs-stop`
 
 **Visual Identity**:
 - ✅ Mediterranean color palette implemented:
@@ -461,14 +460,14 @@ All 25 tasks across 6 implementation phases have been completed successfully. Co
 ### Deployment Steps
 
 1. ✅ Build Docker image: `docker compose build prism-rs`
-2. ✅ Start service: `make prism-rs-start`
-3. ✅ Check health: `make prism-rs-status`
+2. ✅ Start service: `make prs-start`
+3. ✅ Check health: `make prs-status`
 4. ✅ Verify UI loads: http://localhost:3003
 5. ✅ Test all routes: /, /search, /geography, /languages, /about
 
 ### Post-Deployment
 
-- ✅ Monitor logs: `make prism-rs-logs`
+- ✅ Monitor logs: `make prs-logs`
 - ✅ Check Prism API connectivity
 - ✅ Verify Ollama LLM available
 - ✅ Test geography data loads (1,342 places)

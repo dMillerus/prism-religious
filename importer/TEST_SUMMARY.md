@@ -263,7 +263,7 @@ async def test_search_new_issue(self, prism_test_client):
 ✅ Graceful skipping for unavailable services
 ✅ Clear test names describing intent
 ✅ Comprehensive docstrings
-✅ Follows govarch/prism test patterns
+✅ Follows pls/prism test patterns
 ✅ Fast unit tests (<10s)
 ✅ Integration tests marked appropriately
 

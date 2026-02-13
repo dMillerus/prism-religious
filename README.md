@@ -100,13 +100,13 @@ npm run check
 
 ```bash
 # Build image
-docker build -f docker/Dockerfile -t prism-rs-ui:latest .
+docker build -f docker/Dockerfile -t prism-religious-ui:latest .
 
 # Run container
 docker run -p 3000:3000 \
   -e VITE_PRISM_API_URL=http://prism:8100 \
   -e VITE_OLLAMA_API_URL=http://ollama:11434 \
-  prism-rs-ui:latest
+  prism-religious-ui:latest
 ```
 
 ## Environment Variables

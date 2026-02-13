@@ -188,7 +188,7 @@ Makefile additions:
 
 ### 4. Standalone Script (Not Prism Built-in)
 **Rationale**:
-- Follows govarch importer pattern
+- Follows prism-legislative importer pattern
 - Independent from Prism releases
 - Easy to extend for new translations
 - Can be packaged as MCP server later
