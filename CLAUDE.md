@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code when working with the Prism Religious Studies submodule.
 
+> **Ecosystem architecture**: See [`docs/prism-architecture.md`](/dpool/aiml-stack/docs/prism-architecture.md) for cross-module contracts, dual ingestion model, and domain registry.
+
 ## Project Overview
 
 **Prism Religious Studies** is an academic research platform for religious texts, currently focused on Christianity. The application consists of:
